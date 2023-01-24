@@ -1,0 +1,43 @@
+﻿using Books_API.Context;
+
+namespace Books_API.Models.Interface.InterfaceImplementation {
+    public class IBookImplementation : IBookInterface {
+
+        private MySQLContext _context;
+        public IBookImplementation(MySQLContext context) {
+            _context = context;
+        }
+
+        public List<Book> FindAll() {
+            
+            List<Book> books = new List<Book>();
+            return _context.Books.ToList();
+           
+        }
+
+        public Book FindById(long id) {
+
+            if(_context.Books.Any(b => b.Id == id)) {
+                return _context.Books.SingleOrDefault(b => b.Id == id);
+            } else {
+                return null;
+            }
+            
+        }
+
+        public Book Create(Book book) {
+            try {
+
+                _context.Add(book);
+                _context.SaveChanges();
+                return book;
+
+            }
+            catch(Exception ex) {
+                throw;
+            }
+        }
+
+
+    }
+}
