@@ -25,6 +25,33 @@ namespace Books_API.Models.Interface.InterfaceImplementation {
             
         }
 
+        public void Delete(long id) {
+            if(_context.Books.Any(b => b.Id == id)) {
+                try {                 
+                    _context.Remove(_context.Books.FirstOrDefault(p => p.Id == id));
+                    _context.SaveChanges();              
+                }
+                catch (Exception ex) {
+                    throw;
+                }
+            }
+        }
+
+        public Book Update(Book book) {
+            if(_context.Books.Any(p => p.Id == book.Id)) {
+                try {
+                    var oldBook = _context.Books.FirstOrDefault(p => p.Id == book.Id);
+                    _context.Entry(oldBook).CurrentValues.SetValues(book);
+                    _context.SaveChanges();
+                    return book;
+                }catch(Exception ex) {
+                    throw;
+                }
+            } else {
+                return null;
+            }
+        }
+
         public Book Create(Book book) {
             try {
 
